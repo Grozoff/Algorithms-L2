@@ -4,18 +4,116 @@ namespace Task1
 {
     class Program
     {
+        public class TestCase
+        {
+            public int Node { get; set; }
+            public int AddAfter { get; set; }
+            public int Find { get; set; }
+            public int Index { get; set; }
+            public int Count { get; set; }
+        }
+
         static void Main(string[] args)
         {
             var list = new LinkedList();
-            list.AddNode(72);
-            list.AddNode(37);
-            list.AddNode(48);
-            list.AddNode(25);
-            var findNode = list.FindNode(25);
-            list.AddNodeAfter(findNode, 10);
+
+            // Тест на добавление и поиск ноды
+            var testData = new TestCase[5];
+            testData[0] = new TestCase()
+            {
+                Node = 72,
+                Find = 72,
+                Index = 0
+            };
+            testData[1] = new TestCase()
+            {
+                Node = 37,
+                Find = 37,
+                Index = 1
+            };
+            testData[2] = new TestCase()
+            {
+                Node = 48,
+                Find = 48,
+                Index = 2
+            };
+            testData[3] = new TestCase()
+            {
+                Node = 25,
+                Find = 25,
+                Index = 3
+            };
+            testData[4] = new TestCase()
+            {
+                Node = 51,
+                Find = 51,
+                Index = 4
+            };
+
+            foreach (var testCase in testData)
+            {
+                list.AddNode(testCase.Node);
+                var resultAdd = list.FindNode(testCase.Find);
+                var expected = list.GetNodeByIndex(testCase.Index);
+                if (resultAdd == expected)
+                {
+                    Console.WriteLine("Test passed");
+                }
+                else
+                {
+                    Console.WriteLine("Test failed");
+                }
+            }
+
+            // Тест на добавление ноды после определенного элемента и тест количества элементов в списке
+            var testData2 = new TestCase[2];
+            testData2[0] = new TestCase()
+            {
+                Node = 98,
+                AddAfter = 72,
+                Find = 98,
+                Index = 1,
+                Count = 6
+            };
+            testData2[1] = new TestCase()
+            {
+                Node = 60,
+                AddAfter = 25,
+                Find = 60,
+                Index = 5,
+                Count = 7
+            };
+
+            foreach (var testCase2 in testData2)
+            {
+                var addAfter = list.FindNode(testCase2.AddAfter);
+                list.AddNodeAfter(addAfter, testCase2.Node);
+                var resultAdd = list.FindNode(testCase2.Find);
+                var expected = list.GetNodeByIndex(testCase2.Index);
+                var cnt = list.GetCount();
+                if ((resultAdd == expected) && (testCase2.Count == cnt))
+                {
+                    Console.WriteLine("Test passed");
+                }
+                else
+                {
+                    Console.WriteLine("Test failed");
+                }
+            }
+
+            // Тест на удаление ноды по порядковому номеру и значению
+            var findNode = list.FindNode(51);
             list.RemoveNode(2);
             list.RemoveNode(findNode);
-            list.GetCount();
+
+            if ((list.FindNode(51) == null) && (list.FindNode(2) == null))
+            {
+                Console.WriteLine("Test passed");
+            }
+            else
+            {
+                Console.WriteLine("Test failed");
+            }
         }
 
         public class Node
@@ -59,7 +157,7 @@ namespace Task1
                 count++;
             }
 
-            private Node GetNodeByIndex(int nodeIndex)
+            public Node GetNodeByIndex(int nodeIndex)
             {
                 Node node;
 
